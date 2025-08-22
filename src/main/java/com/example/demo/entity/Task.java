@@ -6,6 +6,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tasks")
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,44 +14,54 @@ public class Task {
     @Column(nullable = false)
     private String title;
 
+    @Column(length = 500)
     private String description;
 
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    private boolean completed;
+    @Column(nullable = false)
+    private String status; // "pendiente" o "completada"
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    // Relación N:1 con User (muchas tareas pueden pertenecer a un usuario)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Constructores
+    // Constructor vacío
     public Task() {}
 
-    public Task(String title, String description, LocalDate dueDate, User user) {
+    // Constructor con parámetros
+    public Task(String title, String description, LocalDate dueDate, String status, User user) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.completed = false;
+        this.status = status;
         this.user = user;
     }
 
     // Getters y Setters
     public Long getId() { return id; }
+
     public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
+
     public void setTitle(String title) { this.title = title; }
 
     public String getDescription() { return description; }
+
     public void setDescription(String description) { this.description = description; }
 
     public LocalDate getDueDate() { return dueDate; }
+
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
-    public boolean isCompleted() { return completed; }
-    public void setCompleted(boolean completed) { this.completed = completed; }
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 
     public User getUser() { return user; }
+
     public void setUser(User user) { this.user = user; }
 }
