@@ -51,7 +51,7 @@
     const userId = document.getElementById("userId").value;
     let editingTaskId = null; // null = agregando, distinto de null = editando
 
-    // 🔹 Cargar tareas
+    // Cargar tareas
     async function loadTasks() {
         const response = await fetch(`/tasks/all/${userId}`);
         const tasks = await response.json();
@@ -84,7 +84,7 @@
         });
     }
 
-    // 🔹 Manejar formulario (Agregar o Actualizar)
+    // Manejar formulario (Agregar o Actualizar)
     document.getElementById("taskForm").addEventListener("submit", async function(e) {
         e.preventDefault();
 
@@ -97,7 +97,7 @@
         };
 
         if (editingTaskId) {
-            // 🔥 Actualizar
+            //  Actualizar
             task.id = editingTaskId;
             await fetch(`/tasks/update/${editingTaskId}`, {
                 method: "PUT",
@@ -112,7 +112,7 @@
             button.classList.add("btn-success");
 
         } else {
-            // ➕ Agregar
+            //  Agregar
             await fetch("/tasks/add", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -124,7 +124,7 @@
         loadTasks();
     });
 
-    // 🔹 Editar tarea
+    //  Editar tarea
     async function editTask(id, title, description, status, dueDate) {
         document.getElementById("title").value = title;
         document.getElementById("description").value = description;
@@ -139,7 +139,7 @@
         button.classList.add("btn-warning");
     }
 
-    // 🔹 Eliminar tarea
+    //  Eliminar tarea
     async function deleteTask(id) {
         await fetch(`/tasks/delete/${id}`, { method: "DELETE" });
         loadTasks();

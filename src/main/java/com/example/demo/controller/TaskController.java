@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import java.util.*;
-import java.util.*;
 
+
+/**
+ * Controlador encargado de manejar las operaciones relacionadas con las tareas (Task).
+ * Proporciona endpoints para visualizar, crear, actualizar y eliminar tareas
+ * asociadas a un usuario específico.
+ */
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
@@ -22,14 +27,26 @@ public class TaskController {
         this.userService = userService;
     }
 
-    // Vista de tareas (recibe el userId desde la URL)
+    /**
+     * Muestra la vista de tareas de un usuario.
+     *
+     * @param userId ID del usuario cuyas tareas se van a mostrar
+     * @param model Modelo de Spring para pasar atributos a la vista
+     * @return Nombre de la vista "tasks"
+     */
     @GetMapping("/view")
     public String viewTasks(@RequestParam Long userId, Model model) {
         model.addAttribute("userId", userId);
         return "tasks";
     }
 
-    // 🔹 Obtener todas las tareas de un usuario
+    /**
+     * Obtiene todas las tareas asociadas a un usuario específico.
+     *
+     * @param userId ID del usuario
+     * @return Lista de tareas del usuario
+     */
+
     @GetMapping("/all/{userId}")
     @ResponseBody
     public List<Task> getTasks(@PathVariable Long userId) {
@@ -37,14 +54,25 @@ public class TaskController {
         return taskService.getTasksByUser(user);
     }
 
-    // 🔹 Crear nueva tarea (AJAX con fetch)
+    /**
+     * Crea una nueva tarea.
+     *
+     * @param task Objeto Task enviado en el cuerpo de la petición (JSON)
+     * @return La tarea creada y guardada en la base de datos
+     */
     @PostMapping("/add")
     @ResponseBody
     public Task addTask(@RequestBody Task task) {
         return taskService.saveTask(task);
     }
 
-    // 🔹 Actualizar tarea
+    /**
+     * Actualiza una tarea existente según su ID.
+     *
+     * @param id ID de la tarea a actualizar
+     * @param updatedTask Objeto con los nuevos valores de la tarea
+     * @return La tarea actualizada
+     */
     @PutMapping("/update/{id}")
     @ResponseBody
     public Task updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
@@ -56,7 +84,12 @@ public class TaskController {
         return taskService.saveTask(task);
     }
 
-    // 🔹 Eliminar tarea
+    /**
+     * Elimina una tarea según su ID.
+     *
+     * @param id ID de la tarea a eliminar
+     * @return Mensaje de confirmación de eliminación
+     */
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public String deleteTask(@PathVariable Long id) {

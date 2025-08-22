@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.*;
 
-@Entity
-@Table(name = "users") // nombre de la tabla en la BD
+@Entity                 // Marca esta clase como una entidad gestionada por JPA
+@Table(name = "users") // Define que esta entidad se guardará en la tabla users de la BD
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // autoincremental
-    private Long id;
+    @Id                  // aca se esta indicando que este campo es la clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Generación automática del ID autoincremental
+    private Long id;          //variable para almacenar el ID del usuario
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false) // Define las propiedades de la columna en la BD no puede ser nula y no es única
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String userLastname;
 
     @Column(nullable = false, unique = true)
@@ -28,15 +28,26 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Relación 1:N con Task (un usuario puede tener muchas tareas)
+    /**
+     * Relación 1:N con tareas.
+     * Un usuario puede tener múltiples tareas asignadas.
+     *
+     * - mappedBy = "user": indica que la relación está definida en Task.user
+     * - cascade = ALL: si se elimina el usuario, se eliminan sus tareas
+     * - orphanRemoval = true: si se elimina de la lista, también se borra en la BD
+     * - @JsonIgnore: evita bucles infinitos en JSON
+     */
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Task> tasks = new ArrayList<>();
 
-    // Constructor vacío
+    // Constructor vacío para JPA
     public User() {}
 
-    // Constructor con parámetros
+
+
+    // Constructor con parámetros para crear un usuario
     public User(String username, String password, String userLastname, String document_number, String email) {
         this.username = username;
         this.password = password;
@@ -46,6 +57,7 @@ public class User {
     }
 
     // Getters y Setters
+
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }

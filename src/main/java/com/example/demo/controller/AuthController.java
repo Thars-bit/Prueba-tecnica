@@ -4,10 +4,17 @@ import com.example.demo.entity.User;
 import com.example.demo.services.UserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 
-import java.util.Optional;
 
+/**
+ * Controlador encargado de gestionar las rutas de autenticación
+ * y registro de usuarios dentro de la aplicación.
+ *
+ * - /auth/login (GET): Carga la vista del login.
+ * - /auth/register (GET): Carga la vista de registro.
+ * - /auth/register (POST): Registra un usuario en la base de datos.
+ * - /auth/login (POST): Valida credenciales de acceso con email y password.
+ */
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -18,19 +25,46 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // Vista de login
+    /**
+     * GET /auth/login
+     *
+     * Retorna la página de inicio de sesión.
+     * Spring buscará el archivo login.html en la carpeta templates.
+     *
+     * @return Nombre de la plantilla login.html
+     */
     @GetMapping("/login")
     public String loginPage() {
         return "login"; // carga templates/login.html
     }
 
-    // Vista de registro
+    /**
+     * GET /auth/register
+     *
+     * Retorna la página de registro de usuario.
+     * Spring buscará el archivo register.html en la carpeta templates.
+     *
+     * @return Nombre de la plantilla register.html
+     */
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
-    // Registro (POST con formulario clásico)
+    /**
+     * POST /auth/register
+     *
+     * Permite registrar un nuevo usuario enviando datos en formato JSON.
+     * Ejemplo de petición:
+     * {
+     *   "name": "Juan",
+     *   "email": "juan@example.com",
+     *   "password": "12345"
+     * }
+     *
+     * @param user Objeto User recibido desde el cuerpo de la petición.
+     * @return Mensaje de éxito o error en el registro.
+     */
     @PostMapping("/register")
     @ResponseBody
     public String registerUser(@RequestBody User user) {
@@ -42,7 +76,20 @@ public class AuthController {
         }
     }
 
-    // Login con JSON (AJAX con fetch)
+    /**
+     * POST /auth/login
+     *
+     * Permite autenticar un usuario mediante email y contraseña.
+     * Ejemplo de petición:
+     * {
+     *   "email": "juan@example.com",
+     *   "password": "12345"
+     * }
+     *
+     * @param loginRequest Objeto User recibido con email y password.
+     * @return "OK:{id}" si las credenciales son correctas,
+     *         o mensaje de error si fallan.
+     */
     @PostMapping("/login")
     @ResponseBody
     public String login(@RequestBody User loginRequest) {
