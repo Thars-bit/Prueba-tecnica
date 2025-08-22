@@ -16,6 +16,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false, unique = true)
+    private String userLastname;
+
+    @Column(nullable = false, unique = true)
+    private String document_number;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -29,9 +37,12 @@ public class User {
     public User() {}
 
     // Constructor con parámetros
-    public User(String username, String password) {
+    public User(String username, String password, String userLastname, String document_number, String email) {
         this.username = username;
         this.password = password;
+        this.userLastname = userLastname;
+        this.document_number = document_number;
+        this.email = email;
     }
 
     // Getters y Setters
@@ -42,6 +53,18 @@ public class User {
     public String getUsername() { return username; }
 
     public void setUsername(String username) { this.username = username; }
+
+    public String getUserLastname() { return userLastname; }
+
+    public void setUserLastname(String userLastname) { this.userLastname = userLastname; }
+
+    public String getDocument_number() { return document_number; }
+
+    public void setDocument_number(String document_number) { this.document_number = document_number; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     public String getPassword() { return password; }
 

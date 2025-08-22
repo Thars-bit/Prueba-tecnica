@@ -19,6 +19,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     // Registrar un nuevo usuario (validando que no exista)
     public User registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
