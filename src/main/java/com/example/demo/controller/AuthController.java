@@ -32,14 +32,13 @@ public class AuthController {
 
     // Registro (POST con formulario clásico)
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
+    @ResponseBody
+    public String registerUser(@RequestBody User user) {
         try {
             userService.registerUser(user);
-            model.addAttribute("success", "Usuario registrado correctamente.");
-            return "login";
+            return "OK: Usuario registrado correctamente.";
         } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "register";
+            return "ERROR: " + e.getMessage();
         }
     }
 
@@ -47,9 +46,9 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public String login(@RequestBody User loginRequest) {
-        return userService.findByUsername(loginRequest.getUsername())
+        return userService.findByEmail(loginRequest.getEmail()) //
                 .filter(user -> user.getPassword().equals(loginRequest.getPassword()))
-                .map(user -> "OK:" + user.getId()) // devolvemos "OK:ID" para JS
-                .orElse("ERROR: Usuario o contraseña incorrectos");
+                .map(user -> "OK:" + user.getId())
+                .orElse("ERROR: Correo o contraseña incorrectos");
     }
 }
